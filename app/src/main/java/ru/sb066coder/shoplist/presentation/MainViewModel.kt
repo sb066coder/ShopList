@@ -23,7 +23,7 @@ class MainViewModel: ViewModel() {
         deleteShopItemUseCase.deleteShopItem(item)
     }
 
-    fun ShopItemStateChange(item: ShopItem) {
+    fun shopItemStateChange(item: ShopItem) {
         updateShopItemUseCase.updateShopItem(item.copy(active = !item.active))
     }
 }
