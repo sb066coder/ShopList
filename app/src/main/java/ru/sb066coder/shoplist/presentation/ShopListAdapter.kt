@@ -1,15 +1,12 @@
 package ru.sb066coder.shoplist.presentation
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView.Adapter
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.ListAdapter
 import ru.sb066coder.shoplist.R
 import ru.sb066coder.shoplist.domain.ShopItem
 
-class ShopListAdapter: Adapter<ShopListAdapter.ShopItemViewHolder>() {
+class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCallback()) {//Adapter<ShopListAdapter.ShopItemViewHolder>() {
 
     companion object {
         const val INACTIVE_ITEM = 0
@@ -17,11 +14,6 @@ class ShopListAdapter: Adapter<ShopListAdapter.ShopItemViewHolder>() {
         const val RV_MAX_POOL_SIZE = 5
     }
 
-    var shopList = listOf<ShopItem>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
 
     var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null
     var onShopItemClickListener: ((ShopItem) -> Unit)? = null
@@ -37,19 +29,16 @@ class ShopListAdapter: Adapter<ShopListAdapter.ShopItemViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (shopList[position].active) {
+        return if (getItem(position).active) {
             ACTIVE_ITEM
         } else {
             INACTIVE_ITEM
         }
     }
 
-    override fun getItemCount(): Int {
-        return shopList.size
-    }
 
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
-        val shopItem = shopList[position]
+        val shopItem = getItem(position)
         holder.tvName.text = shopItem.name
         holder.tvCount.text = shopItem.count.toString()
         holder.itemView.setOnLongClickListener {
@@ -63,8 +52,4 @@ class ShopListAdapter: Adapter<ShopListAdapter.ShopItemViewHolder>() {
 
     }
 
-    class ShopItemViewHolder(itemView: View) : ViewHolder(itemView) {
-        val tvName: TextView = itemView.findViewById(R.id.tvName)
-        val tvCount: TextView = itemView.findViewById(R.id.tvCount)
-    }
 }
