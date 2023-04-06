@@ -73,7 +73,7 @@ class ShopItemViewModel: ViewModel() {
     private fun parseAmount(inputAmount: String?): Float {
         val amount = try {
             inputAmount?.trim()?.toFloat() ?: 0.0F
-        } catch (e: ClassCastException) {
+        } catch (e: NumberFormatException) {
             0.0F
         }
         return amount
