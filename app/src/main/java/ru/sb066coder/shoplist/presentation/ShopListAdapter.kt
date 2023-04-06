@@ -40,7 +40,7 @@ class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCal
     override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
         val shopItem = getItem(position)
         holder.tvName.text = shopItem.name
-        holder.tvCount.text = shopItem.count.toString()
+        holder.tvCount.text = shopItem.amount.toString()
         holder.itemView.setOnLongClickListener {
             onShopItemLongClickListener?.invoke(shopItem)
             true
