@@ -23,26 +23,34 @@ class ShopItemActivity: AppCompatActivity() {
 //    private lateinit var etAmount: EditText
 //    private lateinit var btnSave: Button
 //
-//    private var screenMode = MODE_UNKNOWN
-//    private var shopItemId = ShopItem.UNDEFINED_ID
+    private var screenMode = MODE_UNKNOWN
+    private var shopItemId = ShopItem.UNDEFINED_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shop_item)
-//        parseIntent()
+        parseIntent()
 //        viewModel = ViewModelProvider(this)[ShopItemViewModel::class.java]
 //        initializeViews()
-//        when (screenMode) {
-//            MODE_ADD -> launchAddMode()
-//            MODE_EDIT -> launchEditMode()
-//        }
+        launchRightMode()
 //        setupErrorObservers()
 //        viewModel.closeScreen.observe(this) {
 //            finish()
 //        }
     }
 
-//    private fun launchAddMode() {
+    private fun launchRightMode() {
+        val fragment = when (screenMode) {
+            MODE_ADD  -> ShopItemFragment.newInstanceAddItem()
+            MODE_EDIT -> ShopItemFragment.newInstanceEditItem(shopItemId)
+            else      -> throw RuntimeException("Unknown parameter screen mode $screenMode")
+        }
+        supportFragmentManager.beginTransaction()
+            .add(R.id.shop_item_container, fragment)
+            .commit()
+    }
+
+    //    private fun launchAddMode() {
 //        btnSave.setOnClickListener {
 //            viewModel.addShopItem(etName.text.toString(), etAmount.text.toString())
 //        }
@@ -95,19 +103,19 @@ class ShopItemActivity: AppCompatActivity() {
 //        })
 //    }
 //
-//    private fun parseIntent() {
-//        screenMode = intent.getStringExtra(EXTRA_SCREEN_MODE) ?: throw RuntimeException(
-//            "Parameter screen mode is absent"
-//        )
-//        if (screenMode != MODE_ADD && screenMode != MODE_EDIT) {
-//            throw RuntimeException("Unknown parameter screen mode")
-//        }
-//        if (screenMode == MODE_EDIT && !intent.hasExtra(EXTRA_SHOP_ITEM_ID)) {
-//            throw RuntimeException("Parameter item id is absent")
-//        } else if (screenMode == MODE_EDIT) {
-//            shopItemId = intent.getIntExtra(EXTRA_SHOP_ITEM_ID, ShopItem.UNDEFINED_ID)
-//        }
-//    }
+    private fun parseIntent() {
+        screenMode = intent.getStringExtra(EXTRA_SCREEN_MODE) ?: throw RuntimeException(
+            "Parameter screen mode is absent"
+        )
+        if (screenMode != MODE_ADD && screenMode != MODE_EDIT) {
+            throw RuntimeException("Unknown parameter screen mode $screenMode")
+        }
+        if (screenMode == MODE_EDIT && !intent.hasExtra(EXTRA_SHOP_ITEM_ID)) {
+            throw RuntimeException("Parameter item id is absent")
+        } else if (screenMode == MODE_EDIT) {
+            shopItemId = intent.getIntExtra(EXTRA_SHOP_ITEM_ID, ShopItem.UNDEFINED_ID)
+        }
+    }
 //
 //    private fun initializeViews() {
 //        tilName = findViewById(R.id.til_name)
