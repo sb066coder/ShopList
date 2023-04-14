@@ -1,5 +1,6 @@
 package ru.sb066coder.shoplist.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,6 +21,7 @@ class ShopItemFragment : Fragment() {
 
     private var screenMode: String = MODE_UNKNOWN
     private var shopItemId: Int = ShopItem.UNDEFINED_ID
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
 
     private lateinit var tilName: TextInputLayout
     private lateinit var tilAmount: TextInputLayout
@@ -35,6 +37,15 @@ class ShopItemFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_shop_item, container, false)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnEditingFinishedListener) {
+            onEditingFinishedListener = context
+        } else {
+            throw RuntimeException("Activity must implement OnEditingFinishedListener")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseParameters()
@@ -47,7 +58,7 @@ class ShopItemFragment : Fragment() {
         launchRightMode()
         setupErrorObservers()
         viewModel.closeScreen.observe(viewLifecycleOwner) {
-            activity?.onBackPressed()
+            onEditingFinishedListener.onEditingFinished()
         }
     }
 
@@ -139,6 +150,9 @@ class ShopItemFragment : Fragment() {
         btnSave = view.findViewById(R.id.btn_save)
     }
 
+    interface OnEditingFinishedListener {
+        fun onEditingFinished()
+    }
     companion object {
         private const val SCREEN_MODE = "extra_mode"
         private const val SHOP_ITEM_ID = "extra_id"
