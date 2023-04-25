@@ -1,17 +1,18 @@
 package ru.sb066coder.shoplist.presentation
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import ru.sb066coder.shoplist.data.ShopListRepositoryImpl
 import ru.sb066coder.shoplist.domain.DeleteShopItemUseCase
 import ru.sb066coder.shoplist.domain.GetShopListUseCase
 import ru.sb066coder.shoplist.domain.ShopItem
 import ru.sb066coder.shoplist.domain.UpdateShopItemUseCase
 
-class MainViewModel: ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     // FIXME("упрощенный вариант поставки зависимости, нарушающий архитектуру приложения -
     //  обращение из presentation layer в data layer")
-    private val repository = ShopListRepositoryImpl
+    private val repository = ShopListRepositoryImpl(application)
 
     private val getShopListUseCase = GetShopListUseCase(repository)
     private val deleteShopItemUseCase = DeleteShopItemUseCase(repository)

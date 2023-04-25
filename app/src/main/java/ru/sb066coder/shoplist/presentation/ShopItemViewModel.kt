@@ -1,19 +1,20 @@
 package ru.sb066coder.shoplist.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import ru.sb066coder.shoplist.data.ShopListRepositoryImpl
 import ru.sb066coder.shoplist.domain.AddShopItemUseCase
 import ru.sb066coder.shoplist.domain.GetShopItemUseCase
 import ru.sb066coder.shoplist.domain.ShopItem
 import ru.sb066coder.shoplist.domain.UpdateShopItemUseCase
 
-class ShopItemViewModel: ViewModel() {
+class ShopItemViewModel(application: Application) : AndroidViewModel(application) {
 
     // FIXME("упрощенный вариант поставки зависимости, нарушающий архитектуру приложения -
     //  обращение из presentation layer в data layer")
-    private val repository = ShopListRepositoryImpl
+    private val repository = ShopListRepositoryImpl(application)
 
     private val getShopItemUseCase = GetShopItemUseCase(repository)
     private val addShopItemUseCase = AddShopItemUseCase(repository)
